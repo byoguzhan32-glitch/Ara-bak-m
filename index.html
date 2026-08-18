@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Araç Son</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello, World!</h1>
+        <p>Start editing to build something amazing.</p>
+    </div>
+</body>
+</html><!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Araç Bakım Defterim</title>
+
+    <!-- Mobil PWA Ayarları -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0284c7">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Araç Bakım Defterim","short_name":"Bakım Defterim","start_url":".","display":"standalone","background_color":"#f1f5f9","theme_color":"#0284c7"}'>
+
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --primary: #0284c7;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 16px; max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; min-height: 100vh; }
+        .main-content { flex: 1; }
+        .header { text-align: center; margin-bottom: 16px; }
+        .header h1 { font-size: 1.4rem; color: var(--primary); }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .card h2 { font-size: 1rem; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        .form-group { margin-bottom: 10px; }
+        .form-row { display: flex; gap: 8px; }
+        .form-row .form-group { flex: 1; }
+        label { display: block; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 3px; font-weight: 600; }
+        input, select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; outline: none; }
+        button { width: 100%; padding: 10px; background-color: var(--primary); color: white; border: none; border-radius: 6px; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin-top: 4px; }
+        .btn-sub { background-color: #0f766e; }
+        .btn-danger { background-color: var(--danger); }
+        .btn-notify { background-color: #8b5cf6; margin-bottom: 12px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+        .info-box { background: #f8fafc; padding: 8px; border-radius: 8px; border: 1px solid var(--border); text-align: center; }
+        .info-box .title { font-size: 0.7rem; color: var(--text-sub); }
+        .info-box .value { font-size: 0.85rem; font-weight: bold; margin-top: 4px; }
+        .item { margin-bottom: 14px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid var(--border); }
+        .item-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+        .progress-bar { height: 8px; background-color: #e2e8f0; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.3s; }
+        .item-actions { display: flex; gap: 6px; justify-content: flex-end; }
+        .btn-xs { padding: 6px 10px; font-size: 0.75rem; border-radius: 4px; border: none; cursor: pointer; color: white; font-weight: 600; }
+        .badge { padding: 2px 6px; border-radius: 4px; color: white; font-size: 0.68rem; font-weight: bold; display: inline-block; }
+        .bg-success { background-color: var(--success); }
+        .bg-warning { background-color: var(--warning); }
+        .bg-danger { background-color: var(--danger); }
+        
+        .ariza-card { border-left: 4px solid var(--danger); background: #fff5f5; padding: 10px; border-radius: 6px; margin-bottom: 10px; }
+        .ariza-kod { font-weight: bold; color: var(--danger); font-size: 0.95rem; }
+        .ariza-tanim { font-weight: 600; color: #1e293b; margin: 4px 0; font-size: 0.85rem; }
+        .ariza-cozum { font-size: 0.8rem; color: #475569; background: #ffffff; padding: 6px; border-radius: 4px; border: 1px solid #fca5a5; margin-top: 6px; }
+        .external-search { display: inline-block; margin-top: 6px; font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: bold; }
+        
+        footer { text-align: center; padding: 16px 0 8px 0; font-size: 0.8rem; color: var(--text-sub); border-top: 1px dashed var(--border); margin-top: 16px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 id="aracBaslik">🚗 Araç Bakım Defterim</h1>
+            <p id="aracSubBaslik" style="font-size:0.85rem; color:var(--text-sub);">Model & Yıl Bilgisi Girilmedi</p>
+        </div>
+
+        <!-- Bildirim İzni Butonu -->
+        <button id="notifyBtn" onclick="bildirimİzniIste()" class="btn-notify">🔔 Mobil Bildirimleri ve Uyarıları Aç</button>
+
+        <!-- Araç Profil Kartı -->
+        <div class="card">
+            <h2>Araç Künyesi & Güncel KM</h2>
+            <div class="form-row">
+                <div class="form-group"><label>Marka</label><input type="text" id="marka" placeholder="Volkswagen"></div>
+                <div class="form-group"><label>Model</label><input type="text" id="model" placeholder="Golf 1.6 TDI"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Model Yılı</label><input type="number" id="yil" placeholder="2018"></div>
+                <div class="form-group"><label>Mevcut KM</label><input type="number" id="mevcutKm" placeholder="125000"></div>
+            </div>
+            <button onclick="aracBilgiKaydet()">Künye & KM Güncelle</button>
+        </div>
+
+        <!-- Resmi İşlemler & Poliçeler -->
+        <div class="card">
+            <h2>Resmi Tarihler & Evraklar</h2>
+            <div class="info-grid">
+                <div class="info-box"><div class="title">Muayene</div><div class="value" id="vizeKalanText">-</div></div>
+                <div class="info-box"><div class="title">Sigorta</div><div class="value" id="sigortaKalanText">-</div></div>
+                <div class="info-box"><div class="title">Kasko</div><div class="value" id="kaskoKalanText">-</div></div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Vize Tarihi</label>
+                <input type="date" id="vizeTarihi">
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Sigorta Tarihi</label><input type="date" id="sigortaTarihi"></div>
+                <div class="form-group"><label>Kasko Tarihi</label><input type="date" id="kaskoTarihi"></div>
+            </div>
+            <button onclick="tarihleriKaydet()" style="background-color: #334155;">Tarihleri Güncelle</button>
+        </div>
+
+        <!-- Mekanik Bakım Takibi -->
+        <div class="card">
+            <h2>Mekanik Bakım Takibi</h2>
+            <div id="parcaListesi"></div>
+
+            <div style="margin-top:15px; border-top:1px dashed var(--border); padding-top:10px;">
+                <label style="margin-bottom:6px; color:var(--primary);">➕ Yeni Bakım/Parça Ekle</label>
+                <div class="form-group">
+                    <input type="text" id="yeniParcaAd" placeholder="Parça Adı (Örn: Bujiler)">
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><input type="number" id="yeniParcaAralik" placeholder="Değişim Aralığı (KM)"></div>
+                    <div class="form-group"><input type="number" id="yeniParcaSonDegisim" placeholder="Son Değişim KM"></div>
+                </div>
+                <button onclick="parcaEkle()" class="btn-sub">Yeni Bakım Kalemi Ekle</button>
+            </div>
+        </div>
+
+        <!-- Otomatik Tanımlı OBD2 Arıza Kodları -->
+        <div class="card">
+            <h2>Otomatik Arıza Kodu Sorgula (OBD2)</h2>
+            <div class="form-group">
+                <label for="arizaInput">Arıza Kodu Girin (P, C, B, U Kodları)</label>
+                <input type="text" id="arizaInput" placeholder="Örn: P0300, P0420, C0035, U0100" oninput="otomatikDoldur()">
+            </div>
+            <div id="otomatikOnizleme" style="font-size:0.8rem; color:var(--text-sub); margin-bottom:8px;"></div>
+            <button onclick="arizaSorguEkle()" class="btn-danger">Arıza Ekle & Analiz Et</button>
+
+            <div id="kayitliArizalar" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <footer>
+        Oğuzhan Akdağ üretmiştir
+    </footer>
+
+    <script>
+        // --- MOBİL UYUMLU SERVICE WORKER VE BİLDİRİM MİMARİSİ ---
+        let swRegistration = null;
+
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob))
+                .then(reg => { swRegistration = reg; })
+                .catch(err => console.log('Service Worker Hatası:', err));
+        }
+
+        async function bildirimİzniIste() {
+            if (!('Notification' in window)) {
+                alert("Bu cihaz varsayılan olarak web bildirimlerini desteklemiyor. Kodları GitHub Pages/Netlify üzerine yükledikten sonra telefonunuzda 'Ana Ekrana Ekle' (PWA) seçeneğini kullanarak uygulamayı yüklediğinizde bildirimler aktif hale gelecektir.");
+                return;
+            }
+
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    document.getElementById('notifyBtn').style.display = 'none';
+                    bildirimGonder("🔔 Bildirimler Aktif", "Araç Bakım Defterim uygulaması bakım ve evrak uyarılarını size iletecektir.");
+                    bakimAlarmlariniKontrolEt();
+                } else if (permission === "denied") {
+                    alert("Bildirim izni reddedildi. Telefon ayarlarınızdan web tarayıcınıza bildirim izni vermeniz gerekmektedir.");
+                }
+            } catch (err) {
+                alert("Bildirim izni istenirken bir sorun oluştu: " + err.message);
+            }
+        }
+
+        function bildirimGonder(baslik, mesaj) {
+            if ('Notification' in window && Notification.permission === "granted") {
+                if (swRegistration && swRegistration.showNotification) {
+                    swRegistration.showNotification(baslik, {
+                        body: mesaj,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/744/744465.png',
+                        vibrate: [200, 100, 200]
+                    });
+                } else {
+                    new Notification(baslik, { body: mesaj });
+                }
+            }
+        }
+
+        const obdKutuphanesi = {
+            "P0100": { tanim: "Hava Akış Sensörü (MAF) Devre Arızası", cozum: "MAF sensörü konnektörünü, kablo tesisatını ve sensörün kendisini inceleyin." },
+            "P0101": { tanim: "Hava Akış Sensörü (MAF) Performans Sorunu", cozum: "MAF sensörünü temizleyin veya hava filtresi tıkanıklığını kontrol edin." },
+            "P0102": { tanim: "Hava Akış Sensörü (MAF) Sinyali Düşük", cozum: "Sensör kablolarında şase kontrolü yapın veya sensörü değiştirin." },
+            "P0110": { tanim: "Emme Hava Sıcaklık Sensörü (IAT) Devre Arızası", cozum: "IAT sensörü kablo bağlantılarını ve sensör direncini ölçün." },
+            "P0113": { tanim: "Emme Hava Sıcaklığı (IAT) Sensör Yüksek Giriş", cozum: "IAT sensör soketini ve kablo kopukluklarını kontrol edin." },
+            "P0115": { tanim: "Motor Soğutma Suyu Sıcaklık Sensörü (ECT) Arızası", cozum: "Hararet sensörünü ve soğutma sıvısı seviyesini kontrol edin." },
+            "P0120": { tanim: "Gaz Kelebeği / Pedal Konum Sensörü A Devresi Arızası", cozum: "Gaz kelebeği gövdesini temizleyin, konum sensörü soketini kontrol edin." },
+            "P0130": { tanim: "Oksijen Sensörü Devre Arızası (Bank 1 Sensor 1)", cozum: "Ön O2 sensörünün kablo tesisatını kontrol edin veya sensörü değiştirin." },
+            "P0135": { tanim: "Oksijen Sensörü Isıtıcı Devre Arızası (Bank 1 Sensor 1)", cozum: "Oksijen sensörü ısıtıcı direncini kontrol edin, sigortayı kontrol edin." },
+            "P0171": { tanim: "Sistem Çok Fakir (Bank 1)", cozum: "Vakum sızıntıları, hava emme hortumları, yakıt filtresi ve basıncını kontrol edin." },
+            "P0172": { tanim: "Sistem Çok Zengin (Bank 1)", cozum: "Tıkalı hava filtresi, damlatan enjektörler veya buji durumunu inceleyin." },
+            "P0300": { tanim: "Rastgele/Çoklu Silindir Ateşleme Kaçırma (Misfire)", cozum: "Bujiler, ateşleme bobinleri, yakıt basıncı veya vakum kaçağını kontrol edin." },
+            "P0301": { tanim: "1. Silindir Ateşleme Kaçırma", cozum: "1. Silindir bujisini, bobinini ve enjektör soketini kontrol edin." },
+            "P0302": { tanim: "2. Silindir Ateşleme Kaçırma", cozum: "2. Silindir bujisini, bobinini ve enjektör soketini kontrol edin." },
+            "P0303": { tanim: "3. Silindir Ateşleme Kaçırma", cozum: "3. Silindir bujisini, bobinini ve enjektör soketini kontrol edin." },
+            "P0304": { tanim: "4. Silindir Ateşleme Kaçırma", cozum: "4. Silindir bujisini, bobinini ve enjektör soketini kontrol edin." },
+            "P0325": { tanim: "Vuruntu Sensörü 1 Devre Arızası (Bank 1)", cozum: "Vuruntu sensörü kablosunu ve sensörün tork sıkılığını kontrol edin." },
+            "P0335": { tanim: "Krank Mili Konum Sensörü (CKP) A Devre Arızası", cozum: "Krank sensörünü, soketini ve sensör karşısındaki dişli çarkı kontrol edin." },
+            "P0340": { tanim: "Eksantrik Mili Konum Sensörü (CMP) Devre Arızası", cozum: "Eksantrik sensörünü, tesisatı ve sente (triger) ayarını kontrol edin." },
+            "P0401": { tanim: "EGR Valfi Yetersiz Akış Tespit Edildi", cozum: "EGR valfini ve kurum dolmuş kanalları temizleyin." },
+            "P0420": { tanim: "Katalitik Konvertör Sistemi Verimliliği Düşük (Bank 1)", cozum: "Arka O2 sensörünü test edin, katalizör tıkanıklığı veya çatlak egzoz kontrolü yapın." },
+            "P0440": { tanim: "Evaporatif Emisyon (EVAP) Kontrol Sistemi Arızası", cozum: "Depo kapağını, EVAP kanister valfini ve vakum hortumlarını inceleyin." },
+            "P0500": { tanim: "Araç Hız Sensörü (VSS) Arızası", cozum: "Hız sensörünü, ABS beyni iletişimini ve sensör kablolarını kontrol edin." },
+            "P0606": { tanim: "PCM / ECU İşlemci Arızası", cozum: "Motor beyni (ECU) şase bağlantılarını ve voltajını kontrol edin, yazılım resetleyin." },
+            "P0700": { tanim: "Şanzıman Kontrol Sistemi (TCM) Genel Arızası", cozum: "Şanzıman yağı seviyesini kontrol edin, TCM beynindeki özel kodları okuyun." },
+            "P0730": { tanim: "Yanlış Vites Oranı Tespit Edildi", cozum: "Şanzıman yağ seviyesi/kalitesini ve selenoid valfleri kontrol edin." },
+            "C0035": { tanim: "Sol Ön Tekerlek Hız Sensörü Devre Arızası (ABS)", cozum: "Sol ön ABS sensörünü, tekerlek rulmanını ve kablo soketini temizleyin/değiştirin." },
+            "C0040": { tanim: "Sağ Ön Tekerlek Hız Sensörü Devre Arızası (ABS)", cozum: "Sağ ön ABS sensörünü ve tesisatını kontrol edin." },
+            "C0110": { tanim: "ABS Pompa Motoru Devre Arızası", cozum: "ABS rölesi, sigortası ve ABS pompa motoru tesisatını kontrol edin." },
+            "B0001": { tanim: "Sürücü Hava Yastığı (Airbag) Sinyal Devre Arızası", cozum: "Direksiyon zembereği (spiral kablo) ve hava yastığı soketlerini kontrol edin." },
+            "B1318": { tanim: "Akü Voltajı Düşük", cozum: "Aküyü şarj edin, şarj dinamosunu (alternatör) ve akü kutup başlarını kontrol edin." },
+            "U0100": { tanim: "ECU / ECM (Motor Beyni) İle İletişim Kaybı (CAN-BUS)", cozum: "CAN-BUS kablo hattını, ECU sigortasını ve ana şase kablolarını kontrol edin." },
+            "U0121": { tanim: "ABS Kontrol Modülü İle İletişim Kaybı", cozum: "ABS modülü sigortasını ve soket bağlantılarını kontrol edin." }
+        };
+
+        let aracVerisi = JSON.parse(localStorage.getItem('aracVerisi')) || {
+            marka: "", model: "", yil: "", mevcut_km: 120000, 
+            vize_tarihi: "", sigorta_tarihi: "", kasko_tarihi: "",
+            parcalar: [
+                { ad: "Motor Yağı & Filtre Seti", aralik: 10000, sonDegisim: 120000 },
+                { ad: "Fren Balataları", aralik: 30000, sonDegisim: 110000 },
+                { ad: "Triger Kayışı / Seti", aralik: 80000, sonDegisim: 80000 }
+            ],
+            arizalar: []
+        };
+
+        window.onload = function() {
+            document.getElementById('marka').value = aracVerisi.marka || "";
+            document.getElementById('model').value = aracVerisi.model || "";
+            document.getElementById('yil').value = aracVerisi.yil || "";
+            document.getElementById('mevcutKm').value = aracVerisi.mevcut_km || 0;
+            document.getElementById('vizeTarihi').value = aracVerisi.vize_tarihi || "";
+            document.getElementById('sigortaTarihi').value = aracVerisi.sigorta_tarihi || "";
+            document.getElementById('kaskoTarihi').value = aracVerisi.kasko_tarihi || "";
+            
+            if ("Notification" in window && Notification.permission === "granted") {
+                document.getElementById('notifyBtn').style.display = 'none';
+            }
+            
+            ekraniGuncelle();
+            bakimAlarmlariniKontrolEt();
+        };
+
+        function bakimAlarmlariniKontrolEt() {
+            if (aracVerisi.parcalar) {
+                aracVerisi.parcalar.forEach(parca => {
+                    const kalanKm = parca.aralik - (aracVerisi.mevcut_km - parca.sonDegisim);
+                    if (kalanKm <= 0) {
+                        bildirimGonder("🚨 BAKIM ZAMANI GELDİ!", `${parca.ad} bakımı ${Math.abs(kalanKm).toLocaleString()} KM geçti! Lütfen yenileyin.`);
+                    } else if (kalanKm <= 1000) {
+                        bildirimGonder("⚠️ BAKIM YAKLAŞTI", `${parca.ad} bakımı için son ${kalanKm.toLocaleString()} KM kaldı.`);
+                    }
+                });
+            }
+
+            const evraklar = [
+                { ad: "Muayene (Vize)", tarih: aracVerisi.vize_tarihi },
+                { ad: "Trafik Sigortası", tarih: aracVerisi.sigorta_tarihi },
+                { ad: "Kasko Poliçesi", tarih: aracVerisi.kasko_tarihi }
+            ];
+
+            evraklar.forEach(evrak => {
+                if (evrak.tarih) {
+                    const fark = Math.ceil((new Date(evrak.tarih) - new Date()) / (1000 * 60 * 60 * 24));
+                    if (fark < 0) {
+                        bildirimGonder("🚨 SÜRESİ GEÇTİ!", `${evrak.ad} süresi ${Math.abs(fark)} gün önce doldu!`);
+                    } else if (fark <= 30) {
+                        bildirimGonder("⚠️ TARİH YAKLAŞTI", `${evrak.ad} bitimine son ${fark} gün kaldı.`);
+                    }
+                }
+            });
+        }
+
+        function veriyiKaydet() {
+            localStorage.setItem('aracVerisi', JSON.stringify(aracVerisi));
+            ekraniGuncelle();
+            bakimAlarmlariniKontrolEt();
+        }
+
+        function guncelKmMeydanaGetir() {
+            const inputKm = parseInt(document.getElementById('mevcutKm').value);
+            if (!isNaN(inputKm) && inputKm > 0) {
+                aracVerisi.mevcut_km = inputKm;
+            }
+        }
+
+        function parcaEkle() {
+            const ad = document.getElementById('yeniParcaAd').value.trim();
+            const aralik = parseInt(document.getElementById('yeniParcaAralik').value);
+            const sonDegisim = parseInt(document.getElementById('yeniParcaSonDegisim').value);
+
+            if (!ad || isNaN(aralik) || isNaN(sonDegisim)) {
+                return alert("Lütfen parçanın adını, değişim aralığını ve son değişim KM değerini eksiksiz girin.");
+            }
+
+            aracVerisi.parcalar.push({ ad, aralik, sonDegisim });
+            document.getElementById('yeniParcaAd').value = "";
+            document.getElementById('yeniParcaAralik').value = "";
+            document.getElementById('yeniParcaSonDegisim').value = "";
+            veriyiKaydet();
+        }
+
+        function parcaSifirla(index) {
+            guncelKmMeydanaGetir();
+            aracVerisi.parcalar[index].sonDegisim = aracVerisi.mevcut_km;
+            veriyiKaydet();
+        }
+
+        function parcaSil(index) {
+            aracVerisi.parcalar.splice(index, 1);
+            veriyiKaydet();
+        }
+
+        function otomatikDoldur() {
+            const input = document.getElementById('arizaInput');
+            if (!input) return;
+            const kod = input.value.trim().toUpperCase();
+            const onizleme = document.getElementById('otomatikOnizleme');
+            
+            if (obdKutuphanesi[kod]) {
+                onizleme.innerHTML = `<strong>Tespit Edildi:</strong> ${obdKutuphanesi[kod].tanim}`;
+            } else if (kod.length >= 4) {
+                onizleme.innerHTML = `<em>Kütüphanede yok. Özel arıza kaydı olarak eklenecek ve arama bağlantısı sunulacak.</em>`;
+            } else {
+                onizleme.innerHTML = "";
+            }
+        }
+
+        function arizaSorguEkle() {
+            const input = document.getElementById('arizaInput');
+            if (!input) return;
+            const kod = input.value.trim().toUpperCase();
+            if (!kod) return alert("Lütfen bir arıza kodu girin (Örn: P0300).");
+
+            let bilgi = obdKutuphanesi[kod] || {
+                tanim: "Özel / Üreticiye Özgü Arıza Kodu",
+                cozum: "Bu kod aracınıza veya üreticiye özel olabilir. Aracınızı yetkili serviste detaylı taratmayı değerlendirebilirsiniz."
+            };
+
+            const bugun = new Date().toISOString().split('T')[0];
+            aracVerisi.arizalar.push({ kod: kod, tanim: bilgi.tanim, cozum: bilgi.cozum, tarih: bugun });
+            input.value = "";
+            document.getElementById('otomatikOnizleme').innerHTML = "";
+            veriyiKaydet();
+        }
+
+        function arizaSil(index) {
+            aracVerisi.arizalar.splice(index, 1);
+            veriyiKaydet();
+        }
+
+        function aracBilgiKaydet() {
+            aracVerisi.marka = document.getElementById('marka').value;
+            aracVerisi.model = document.getElementById('model').value;
+            aracVerisi.yil = document.getElementById('yil').value;
+            guncelKmMeydanaGetir();
+            veriyiKaydet();
+        }
+
+        function tarihleriKaydet() {
+            aracVerisi.vize_tarihi = document.getElementById('vizeTarihi').value;
+            aracVerisi.sigorta_tarihi = document.getElementById('sigortaTarihi').value;
+            aracVerisi.kasko_tarihi = document.getElementById('kaskoTarihi').value;
+            veriyiKaydet();
+        }
+
+        function kalanGunHesapla(tarihStr) {
+            if (!tarihStr) return { metin: "Tarih Yok", class: "" };
+            const fark = Math.ceil((new Date(tarihStr) - new Date()) / (1000 * 60 * 60 * 24));
+            if (fark < 0) return { metin: `${Math.abs(fark)}g geçti`, class: "bg-danger" };
+            if (fark <= 30) return { metin: `${fark}g kaldı`, class: "bg-warning" };
+            return { metin: `${fark}g var`, class: "bg-success" };
+        }
+
+        function ekraniGuncelle() {
+            if (aracVerisi.marka || aracVerisi.model) {
+                document.getElementById('aracBaslik').innerText = `${aracVerisi.marka} ${aracVerisi.model}`;
+                document.getElementById('aracSubBaslik').innerText = `${aracVerisi.yil ? aracVerisi.yil + ' | ' : ''}${aracVerisi.mevcut_km.toLocaleString()} KM`;
+            } else {
+                document.getElementById('aracBaslik').innerText = "🚗 Araç Bakım Defterim";
+            }
+
+            const vize = kalanGunHesapla(aracVerisi.vize_tarihi);
+            const sigorta = kalanGunHesapla(aracVerisi.sigorta_tarihi);
+            const kasko = kalanGunHesapla(aracVerisi.kasko_tarihi);
+
+            document.getElementById('vizeKalanText').innerHTML = `<span class="badge ${vize.class}">${vize.metin}</span>`;
+            document.getElementById('sigortaKalanText').innerHTML = `<span class="badge ${sigorta.class}">${sigorta.metin}</span>`;
+            document.getElementById('kaskoKalanText').innerHTML = `<span class="badge ${kasko.class}">${kasko.metin}</span>`;
+
+            const liste = document.getElementById('parcaListesi');
+            liste.innerHTML = '';
+
+            if (!aracVerisi.parcalar || aracVerisi.parcalar.length === 0) {
+                liste.innerHTML = '<div style="font-size:0.8rem; color:var(--text-sub); margin-bottom:10px;">Kayıtlı bakım kalemi bulunmuyor.</div>';
+            } else {
+                aracVerisi.parcalar.forEach((parca, index) => {
+                    const kalanKm = parca.aralik - (aracVerisi.mevcut_km - parca.sonDegisim);
+                    let yuzde = Math.min(Math.max(((aracVerisi.mevcut_km - parca.sonDegisim) / parca.aralik) * 100, 0), 100);
+                    let renkClass = kalanKm <= 0 ? 'bg-danger' : (kalanKm <= 1000 ? 'bg-warning' : 'bg-success');
+
+                    liste.innerHTML += `
+                        <div class="item">
+                            <div class="item-header">
+                                <span>${parca.ad}</span>
+                                <span class="badge ${renkClass}">${kalanKm <= 0 ? 'Süresi Geçti (' + Math.abs(kalanKm).toLocaleString() + ' km)' : kalanKm.toLocaleString() + ' km kaldı'}</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill ${renkClass}" style="width:${yuzde}%"></div></div>
+                            <div style="font-size:0.75rem; color:var(--text-sub); margin-bottom:6px;">Son Değişim: ${parca.sonDegisim.toLocaleString()} KM</div>
+                            <div class="item-actions">
+                                <button onclick="parcaSifirla(${index})" class="btn-xs" style="background-color: var(--primary);">🔄 Bakım Yapıldı (KM Sıfırla)</button>
+                                <button onclick="parcaSil(${index})" class="btn-xs btn-danger">🗑️ Sil</button>
+                            </div>
+                        </div>`;
+                });
+            }
+
+            const arizaDiv = document.getElementById('kayitliArizalar');
+            arizaDiv.innerHTML = '';
+            if (!aracVerisi.arizalar || aracVerisi.arizalar.length === 0) {
+                arizaDiv.innerHTML = '<div style="font-size:0.8rem; color:var(--text-sub);">Aktif arıza kaydı bulunmuyor.</div>';
+            } else {
+                aracVerisi.arizalar.forEach((ariza, index) => {
+                    const aramaMarka = aracVerisi.marka ? aracVerisi.marka + " " : "";
+                    const googleAramaUrl = `https://www.google.com/search?q=${encodeURIComponent(aramaMarka + ariza.kod + ' arıza kodu çözümü')}`;
+
+                    arizaDiv.innerHTML += `
+                        <div class="ariza-card">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span class="ariza-kod">${ariza.kod}</span>
+                                <a href="#" onclick="arizaSil(${index})" style="color:var(--danger); font-size:0.75rem;">[Sil/Çözüldü]</a>
+                            </div>
+                            <div class="ariza-tanim">${ariza.tanim}</div>
+                            <div class="ariza-cozum"><strong>🔧 Çözüm Adımları:</strong> ${ariza.cozum}</div>
+                            <a href="${googleAramaUrl}" target="_blank" class="external-search">🔍 Google'da Detaylı Arat (${aramaMarka}${ariza.kod}) &rarr;</a>
+                        </div>`;
+                });
+            }
+        }
+    </script>
+</body>
+</html>
